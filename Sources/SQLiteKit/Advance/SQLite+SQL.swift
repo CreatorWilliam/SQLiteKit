@@ -26,7 +26,7 @@ public extension SQLite {
     finalize()
   }
   
-  func excute(select sql: SQL, rowStartHandle: (SQLite) -> Void, rowEndHandle: (SQLite) -> Void) {
+  func excute(select sql: SQL, rowStartHandle: (SQLite) -> Void = { _ in }, rowEndHandle: (SQLite) -> Void = {_ in }) {
     
     prepare(sql)
     

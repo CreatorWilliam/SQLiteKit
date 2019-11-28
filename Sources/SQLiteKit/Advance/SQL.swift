@@ -42,6 +42,52 @@ public extension SQL {
   
 }
 
+// MARK: - Calculation
+public extension SQL {
+  
+  convenience init(calculation: Calculation,
+                   from table: String,
+                   where condition: Condition? = nil) {
+    
+    self.init(calculation: calculation,
+              from: [table],
+              where: condition)
+  }
+  
+  convenience init(calculation: Calculation,
+                   from tables: [String],
+                   where condition: Condition? = nil) {
+    
+    self.init()
+    
+    let isMultiTable = (tables.count > 1)
+    
+    let columnList = isMultiTable ? calculation.column.fullName : calculation.column.simpleName
+    
+    sentence = "SELECT \(columnList)"
+    
+    sentence = "SELECT \(calculation.function)(\(columnList))"
+    
+    /// 保存结果字段列表，后续用于执行赋值操作
+    resultColumns = [calculation.column]
+    
+    sentence += " FROM \(tables.joined(separator: ", "))"
+    
+    
+    if let condition = condition {
+      
+      sentence += " WHERE "
+      sentence += condition.phrase(isSimple: isMultiTable == false)
+      
+      /// 保存字段列表，后续用于执行值绑定
+      bindColumns.append(contentsOf: condition.columns)
+    }
+    
+    sentence += ";"
+  }
+  
+}
+
 // MARK: - Select
 public extension SQL {
   
@@ -56,7 +102,6 @@ public extension SQL {
               where: condition,
               sort: sortedColumn,
               by: sort)
-    
   }
   
   convenience init(select columns: [Column],
