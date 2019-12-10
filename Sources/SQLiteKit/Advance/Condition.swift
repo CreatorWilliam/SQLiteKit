@@ -69,6 +69,17 @@ public struct Condition {
     columns.append(column)
   }
   
+  public init(like column: Column) {
+    
+    let hanlde: Handle = { (isSimple) in
+      
+      let name = isSimple ? column.simpleName : column.fullName
+      return "\(name) like \(column.bindPlaceholder)"
+    }
+    handles.append(hanlde)
+    columns.append(column)
+  }
+  
   public mutating func and(_ condition: Condition) {
     
     let hanlde: Handle = { (isSimple) in
