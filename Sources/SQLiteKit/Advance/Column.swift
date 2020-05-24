@@ -22,7 +22,7 @@ public struct Column {
   /// 字段名称
   private let name: String
   /// 字段的约束
-  private let constraints: Set<Constraint>
+  private let constraints: [Constraint]
   
   /// 创建Table时使用
   public init(name: String,
@@ -32,7 +32,7 @@ public struct Column {
     
     self.tableName = tableName
     self.name = name
-    self.constraints = Set(constraints)
+    self.constraints = constraints
     if constraints.contains(.autoIncrement) { self.dataType = .integer }
     else { self.dataType = dataType }
   }
