@@ -12,11 +12,11 @@ import Foundation
 public struct Column {
   
   /// 字段存储的数据类型
-  public let dataType: DataType
+  internal let dataType: DataType
   /// 字段保存的数据
-  public var data: SQLIteDataCompatible?
+  internal var data: SQLIteDataCompatible?
   /// 赋值操作
-  public var assignmentHandle: ((SQLIteDataCompatible?) -> Void)?
+  internal var valueHandle: ((SQLIteDataCompatible?) -> Void)?
   /// 字段所在的表名
   private let tableName: String
   /// 字段名称
@@ -66,18 +66,19 @@ public extension Column {
 // MARK: - Handle
 public extension Column {
   
-  /// 追加数据
-  func appending(_ data: SQLIteDataCompatible?) -> Column {
-    
+  /// 给字段赋值
+  func assign(_ data: SQLIteDataCompatible?) -> Column {
+
     var column = self
     column.data = data
     return column
   }
   
-  func appending(_ assignmentHandle: @escaping (SQLIteDataCompatible?) -> Void) -> Column {
+  /// 从字段取值
+  func value(_ handle: @escaping (SQLIteDataCompatible?) -> Void) -> Column {
     
     var column = self
-    column.assignmentHandle = assignmentHandle
+    column.valueHandle = handle
     return column
   }
 }

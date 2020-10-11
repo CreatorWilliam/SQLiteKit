@@ -63,7 +63,7 @@ public extension SQLite {
           let temp: String? = column(at: index)
           data = temp
         }
-        item.assignmentHandle?(data)
+        item.valueHandle?(data)
       })
       
       rowEndHandle(self)
