@@ -74,10 +74,10 @@ public struct Condition {
     let hanlde: Handle = { (isSimple) in
       
       let name = isSimple ? column.simpleName : column.fullName
-      return "\(name) like \(column.bindPlaceholder)"
+      return "\(name) LIKE '%\(column.data ?? "")%'"
     }
     handles.append(hanlde)
-    columns.append(column)
+    //columns.append(column)
   }
   
   public mutating func and(_ condition: Condition) {
